@@ -167,3 +167,15 @@ docker pull osrf/ros:noetic-desktop-full
 xhost +                                                 
 docker run -it /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY -v <local-path-directory>:/root/ osrf/ros:noetic-desktop-full
 ```
+
+### Now Creating other terminal inside the same container
+
+```bash
+docker exec -it <container-id> bash
+```
+
+### Saving the work after you have everything
+
+```bash
+docker commit <container-id> osrf/ros:noetic-desktop-full
+```
