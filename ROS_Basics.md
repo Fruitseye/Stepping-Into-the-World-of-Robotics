@@ -44,7 +44,13 @@ $ catkin_create_pkg pkg_ros_basics std_msgs rospy roscpp
 $ cd ~/catkin_ws 
 $ catkin_make
 ```
-
+### ROS Master
+* The role of the ROS Master is to enable individual ROS nodes to locate one another, so that they can communicate with each other peer-to-peer.      
+* So, communication between ROS Nodes is established by ROS Master. 
+* To start ROS Master, run:
+```
+$ roscore
+```
 ### Create a ROS Node
 * Make sure you are in ~/catkin_ws and your setup files are all sourced.     
 * Navigate to pkg_ros_basics
@@ -66,6 +72,42 @@ $ gedit node_hello_ros.py
 ```
 * Now copy and paste the following code in node_hello_ros.py:    
 ```
+#!/usr/bin/env python3
 
+import rospy
+
+
+def main():
+
+    # 1. Make the script a ROS Node.
+    rospy.init_node('node_hello_ros', anonymous=True)
+
+    # 2. Print info on console.
+    rospy.loginfo("Hello World!")
+
+    # 3. Keep the node alive till it is killed by the user.
+    rospy.spin()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass
+
+```
+* Save and Exit
+* To make this file an executable, run: 
+``` 
+$ sudo chmod +x node_hello_ros.py  
+```
+* While running any executable in ROS, ROS Master has to be running. ROS Master, as the name suggests - links together everything.
+* So, while running a ROS Node also, ROS Master should be running!
+* To run the node we created: 
+```
+$ rosrun pkg_ros_basics node_hello_ros.py
+```
+
+### ROS Topics
 
 
