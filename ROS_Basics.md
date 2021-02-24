@@ -109,5 +109,216 @@ $ rosrun pkg_ros_basics node_hello_ros.py
 ```
 
 ### ROS Topics
+* ROS Topics allow unidirectional communication between ROS nodes. When using ROS Topics, a ROS node can be a publisher, subscriber or both.
+* Publisher Node – publishes data on a ROS Topic and a Subscriber Node – subscribes to a ROS Topic to get data. 
+* So, Publisher and Subscriber Nodes exchange ROS messages over ROS Topics
+* ROS Message – a simple data structure which can hold data of various types (int, float, bool, etc.)
+```
+rostopic
+```
+- displays information about ROS Topics, publishers, subscribers, publishing rate and ROS Messages.
+```
+$ rostopic list – shows a list of all topics currently subscribed to and published.
+$ rostopic echo [topic] – shows the data published on a topic. 
+$ rostopic type [topic] – returns the message type of any topic being published.
+$ rostopic pub [topic] [msg_type] [args] – publishes data on a topic.
+```
+
+### Understanding ROS Topics using TurtleSim
+* Make sure ROS Master is running:
+```
+$ roscore
+```
+* In a new terminal, run the TurtleSim Node:
+```
+$ rosrun turtlesim turtlesim_node
+```
+* In another terminal, run:
+```
+$ rosrun turtlesim turtle_teleop_key
+```
+* Now, move the turtle with the arrow keys on your keyboard. Think about what's happening here!  
+* rqt-graph: Creates a dynamic graph of what’s going on in the system.      
+* rqt_graph is a part of the rqt package. To install it, run:   
+```
+$ sudo apt-get install ros-<distro>-rqt        
+$ sudo apt-get install ros-<distro>-rqt-common-plugins    
+```
+* In a new terminal, run:   
+```
+$ rosrun rqt_graph rqt_graph 
+```
+* rostopic pub – publishes data on a topic currently advertised. Try:
+```
+$ rostopic pub -1 /turtle1/cmd_vel geometry_msgs/Twist -- '[2.0, 0.0, 0.0]' '[0.0, 0.0, 1.8]'
+```
+* Also try:
+```
+$ rostopic pub /turtle1/cmd_vel geometry_msgs/Twist -r 1 -- '[2.0, 0.0, 0.0]' '[0.0, 0.0, -1.8]'
+```
+
+##### Note: Refer to PPT for information on some important ROS Terminology
+
+### Launch two ROS Nodes     
+Let’s see how to use the roslaunch command to launch two nodes, namely talker and listener nodes.
+* Create a chatter.launch file and save in a folder named launch, in the pkg_ros_basics package  
+```
+$ roscd pkg_ros_basics
+$ mkdir launch 
+$ cd launch 
+$ touch chatter.launch
+$ gedit chatter.launch
+```
+* Copy and Paste the following code:
+```
+<launch>
+  <node name="talker" pkg="pkg_ros_basics" type="talker.py" output="screen"/>
+  <node name="listener" pkg="pkg_ros_basics" type="listener.py" output="screen"/>
+</launch>
+```
+* Save and Exit
+* Change to scripts folder and create two files - talker.py and listener.py:
+```
+$ cd ..
+$ cd scripts
+$ touch talker.py listener.py
+$ gedit talker.py listener.py 
+```
+* Copy and paste the following codes into their respective files:     
+
+**talker.py
+```
+#!/usr/bin/env python3
+# Software License Agreement (BSD License)
+#
+# Copyright (c) 2008, Willow Garage, Inc.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#  * Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#  * Redistributions in binary form must reproduce the above
+#    copyright notice, this list of conditions and the following
+#    disclaimer in the documentation and/or other materials provided
+#    with the distribution.
+#  * Neither the name of Willow Garage, Inc. nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+# Revision $Id$
+
+## Simple talker demo that published std_msgs/Strings messages
+## to the 'chatter' topic
+
+import rospy
+from std_msgs.msg import String
+
+def talker():
+    pub = rospy.Publisher('chatter', String, queue_size=10)
+    rospy.init_node('talker', anonymous=True)
+    rate = rospy.Rate(10) # 10hz
+    while not rospy.is_shutdown():
+        hello_str = "hello world %s" % rospy.get_time()
+        rospy.loginfo(hello_str)
+        pub.publish(hello_str)
+        rate.sleep()
+
+if __name__ == '__main__':
+    try:
+        talker()
+    except rospy.ROSInterruptException:
+        pass
+```
+**listener.py
+```
+#!/usr/bin/env python3
+# Software License Agreement (BSD License)
+#
+# Copyright (c) 2008, Willow Garage, Inc.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#  * Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#  * Redistributions in binary form must reproduce the above
+#    copyright notice, this list of conditions and the following
+#    disclaimer in the documentation and/or other materials provided
+#    with the distribution.
+#  * Neither the name of Willow Garage, Inc. nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+# Revision $Id$
+
+## Simple talker demo that listens to std_msgs/Strings published 
+## to the 'chatter' topic
+
+import rospy
+from std_msgs.msg import String
+
+def callback(data):
+    rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
+
+def listener():
+
+    # In ROS, nodes are uniquely named. If two nodes with the same
+    # name are launched, the previous one is kicked off. The
+    # anonymous=True flag means that rospy will choose a unique
+    # name for our 'listener' node so that multiple listeners can
+    # run simultaneously.
+    rospy.init_node('listener', anonymous=True)
+
+    rospy.Subscriber('chatter', String, callback)
+
+    # spin() simply keeps python from exiting until this node is stopped
+    rospy.spin()
+
+if __name__ == '__main__':
+    listener()
+```
+* Save and exit
+* Make these files executables:
+```
+$ sudo chmod +x talker.py
+$ sudo chmod +x listener.py
+```
+* Now, to launch these two nodes, run:
+```
+$ roslaunch pkg_ros_basics chatter.launch
+```
+
+
 
 
