@@ -51,6 +51,21 @@ $ catkin_make
 ```
 roscd pkg_ros_basics
 ```
-* If roscd didn't work, it is maybe because you have not sourced setu
+* If roscd didn't work, it is maybe because you have not sourced the setup files. So, in ~/catkin_ws run:
+```
+$ source devel/setup.bash
+```     
+* In the pkg_ros_basics package, create a folder for your python scripts:
+```
+$ mkdir scripts
+$ cd scripts
+```
+```
+$ touch node_hello_ros.py
+$ gedit node_hello_ros.py
+```
+* Now copy and paste the following code in node_hello_ros.py:    
+```
+
 
 
