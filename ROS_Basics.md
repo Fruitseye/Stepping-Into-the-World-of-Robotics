@@ -1,7 +1,7 @@
 # Basics of ROS
 ### Setting up ROS Environment
-During the installation of ROS, you will see that you are prompted to source one of several setup.*sh files, or even add this 'sourcing' to your shell startup script. This is required because ROS relies on the notion of combining spaces using the shell environment. This makes developing against different versions of ROS or against different sets of packages easier. If you are ever having problems finding or using your ROS packages make sure that you have your environment properly setup.    
-If you just installed ROS from apt on Ubuntu then you will have setup.*sh files in '/opt/ros/<distro>/', and you could source them like so: 
+During the installation of ROS, you will see that you are prompted to source one of several setup.* *sh files*, or even add this 'sourcing' to your shell startup script. This is required because ROS relies on the notion of combining spaces using the shell environment. This makes developing against different versions of ROS or against different sets of packages easier. If you are ever having problems finding or using your ROS packages make sure that you have your environment properly setup.    
+If you just installed ROS from apt on Ubuntu then you will have setup.* *sh files* in '/opt/ros/<distro>/', and you could source them like so: 
  ```
 $ source /opt/ros/<distro>/setup.bash
   ```
@@ -28,8 +28,29 @@ $ mkdir –p ~/catkin_ws/src
 $ cd ~/catkin_ws/
 $ catkin_make
 ```
-If you look in your current directory you should now have a 'build' and 'devel' folder. Inside the 'devel' folder you can see that there are now several setup.*sh files. Sourcing any of these files will overlay this workspace on top of your environment. Before continuing source your new setup.*sh file:  
+If you look in your current directory you should now have a 'build' and 'devel' folder. Inside the 'devel' folder you can see that there are now several setup.* *sh files*. Sourcing any of these files will overlay this workspace on top of your environment. Before continuing source your new setup.* *sh file*:  
 ```
-source devel/setup.bash
+$ source devel/setup.bash
 ```
+[Reference](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment)    
+
+### Creating a catkin package
+```
+$ cd ~/catkin_ws/src
+$ catkin_create_pkg pkg_ros_basics std_msgs rospy roscpp
+```    
+* This will create a pkg_ros_basics folder containing a package.xml and a CMakeLists.txt.      
+```
+$ cd ~/catkin_ws 
+$ catkin_make
+```
+
+### Create a ROS Node
+* Make sure you are in ~/catkin_ws and your setup files are all sourced.     
+* Navigate to pkg_ros_basics
+```
+roscd pkg_ros_basics
+```
+* If roscd didn't work, it is maybe because you have not sourced setu
+
 
