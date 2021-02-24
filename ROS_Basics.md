@@ -18,4 +18,18 @@ You will need to run this command on every new shell you open to have access to 
  source /opt/ros/noetic/setup.bash
  ```      
  Save and Exit
+ 
+ ### Creating a ROS Workspace    
+ * A ROS workspace is a folder where you modify, build and install ROS packages.
+ * catkin is the official build system of ROS.      
+To create a catkin workspace:	    
+```
+$ mkdir –p ~/catkin_ws/src
+$ cd ~/catkin_ws/
+$ catkin_make
+```
+If you look in your current directory you should now have a 'build' and 'devel' folder. Inside the 'devel' folder you can see that there are now several setup.*sh files. Sourcing any of these files will overlay this workspace on top of your environment. Before continuing source your new setup.*sh file:  
+```
+source devel/setup.bash
+```
 
