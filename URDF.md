@@ -7,7 +7,6 @@
 #### Installing git
 ```
 sudo apt-get install git
-
 ```
 #### Checking if RViz is working properly
  1) Open a terminal and type "roscore"
@@ -302,7 +301,27 @@ catkin_make(For safety)
  ```
  ### Launching the ROBOT
  
- 1) For launching it in RVIZ:
+  #### For launching it in Gazebo:
+  - Create a file named spawn.launch inside launch folder
+  - Open it
+  ```
+  <?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    </include>
+    <param name="robot_description" command="cat '$(find two_wheeled_robot)/urdf/robot.xacro'"/>
+
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0.5"/>
+
+    <node name="robot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-urdf -param robot_description -model robot -x $(arg x) -y $(arg y) -z $(arg z)" />
+
+</launch>
+  ```
+  
+ #### For launching it in RVIZ:
   - Create a file named rviz.launch inside launch folder
   - Open it 
   ```
@@ -321,25 +340,6 @@ catkin_make(For safety)
 
   <!-- Show in Rviz   -->
   <node name="rviz" pkg="rviz" type="rviz" />
-
-</launch>
-  ```
- 2) For launching it in Gazebo:
-  - Create a file named spawn.launch inside launch folder
-  - Open it
-  ```
-  <?xml version="1.0" encoding="UTF-8"?>
-<launch>
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    </include>
-    <param name="robot_description" command="cat '$(find two_wheeled_robot)/urdf/robot.xacro'"/>
-
-    <arg name="x" default="0"/>
-    <arg name="y" default="0"/>
-    <arg name="z" default="0.5"/>
-
-    <node name="robot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
-        args="-urdf -param robot_description -model robot -x $(arg x) -y $(arg y) -z $(arg z)" />
 
 </launch>
   ```
