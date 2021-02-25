@@ -4,15 +4,26 @@
  - We will write a .xacro file which stands for "XML macro" language instead of a .urdf file. Reason :Think Why?( ~Google why~)
 
 ### Some Prerequisites to be known /satisfied before moving further:
-- Installing git
+#### Installing git
 ```
 sudo apt-get install git
+
 ```
-- Command for Gaining keyboard control
+#### Checking if RViz is working properly
+ 1) Open a terminal and type "roscore"
+ 2) Then...
+```
+rosrun rviz rviz
+```
+#### Checking if Gazebo is working properly
+```
+roslaunch gazebo_ros empty_world.launch
+```
+#### Command for Gaining keyboard control
 ```
 rosrun teleop_twist_keyboard teleop_twist_keyboard.py 
 ```
- - Creating the workspace
+#### Creating the workspace
    1) Create a folder with a name of your choice .I am naming it "Shaastra_Workshop"
    2) Type the following code
 ```
