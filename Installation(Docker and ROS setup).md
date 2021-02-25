@@ -161,11 +161,22 @@ docker run -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY <image>
 docker pull osrf/ros:noetic-desktop-full
 ```
 
+### Creating a local volume to store the files of the container
+
+```bash
+pwd
+
+mkdir ROS-Noetic # Creating a local folder
+cd ROS-Noetic # Moving into the folder
+
+pwd #Get the path of the directory
+```
+
 ### Starting a Container with the ROS Noetic Image
 
 ```bash
 xhost +                                                 
-docker run -it /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY -v <local-path-directory>:/root/ osrf/ros:noetic-desktop-full
+docker run -it /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY -v <local-directory-path>:/root/ osrf/ros:noetic-desktop-full
 ```
 
 ### Now Creating other terminal inside the same container
