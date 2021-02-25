@@ -30,12 +30,17 @@ $ catkin_make
 ```
 If you look in your current directory you should now have a 'build' and 'devel' folder. Inside the 'devel' folder you can see that there are now several setup.* *sh files*. Sourcing any of these files will overlay this workspace on top of your environment. Before continuing source your new setup.* *sh file*:  
 ```
-$ source devel/setup.bash
+$ source ~/catkin_ws/devel/setup.bash
 ```
 
 Add the above command also to your `bashrc` file so that, you need not source it every time you use it.
 ```
 $ nano ~/.bashrc
+
+# Add the following line also to the file
+$ source ~/catkin_ws/devel.setup.bash
+
+$ source ~/.bashrc
 ```
 
 [Reference](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment)    
