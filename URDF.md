@@ -2,7 +2,36 @@
 
  - The syntax will be similar to html syntax since XML is a markup language similar to html
  - We will write a .xacro file which stands for "XML macro" language instead of a .urdf file. Reason :Think Why?( ~Google why~)
-I
+
+### Some Prerequisites to be known /satisfied before moving further:
+- Installing git
+```
+sudo apt-get install git
+```
+- Command for Gaining keyboard control
+```
+rosrun teleop_twist_keyboard teleop_twist_keyboard.py 
+```
+ - Creating the workspace
+   1) Create a folder with a name of your choice .I am naming it "Shaastra_Workshop"
+   2) Type the following code
+```
+mkdir Shaastra_Workshop
+cd Shaastra_Workshop
+mkdir catkin_ws
+cd catkin_ws
+mkdir src
+catkin_make
+
+cd src
+catkin_create_pkg two_wheeled_robot
+cd two_wheeled_robot
+mkdir urdf
+mkdrir launch
+cd urdf
+
+catkin_make(For safety)
+```
 
 ### Some of the Tags that we will be using in our code:
 
@@ -19,7 +48,9 @@ I
 ..... and many more .......
 ```
 
-### Lets dive into the code
+## Lets dive into the code
+
+### Modelling the ROBOT
 
  **1)Include \<xml\> and \<robot\> tag**
 ```
@@ -258,4 +289,51 @@ I
     </sensor>
   </gazebo>
  ```
+ ### Launching the ROBOT
  
+ 1) For launching it in RVIZ:
+  - Create a file named rviz.launch inside launch folder
+  - Open it 
+  ```
+  <?xml version="1.0"?>
+<launch>
+
+  <param name="robot_description" command="cat '$(find two_wheeled_robot)/urdf/robot.xacro'"/>
+
+  <!-- send fake joint values -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+  </node>
+
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <!-- Show in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz" />
+
+</launch>
+  ```
+ 2) For launching it in Gazebo:
+  - Create a file named spawn.launch inside launch folder
+  - Open it
+  ```
+  <?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    </include>
+    <param name="robot_description" command="cat '$(find two_wheeled_robot)/urdf/robot.xacro'"/>
+
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0.5"/>
+
+    <node name="robot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-urdf -param robot_description -model robot -x $(arg x) -y $(arg y) -z $(arg z)" />
+
+</launch>
+  ```
+ 
+ For launching:
+ ```
+ roslaunch two_wheeled_robot <launch-file>
+ ```
