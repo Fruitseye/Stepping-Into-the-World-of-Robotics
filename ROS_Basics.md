@@ -32,6 +32,12 @@ If you look in your current directory you should now have a 'build' and 'devel' 
 ```
 $ source devel/setup.bash
 ```
+
+Add the above command also to your `bashrc` file so that, you need not source it every time you use it.
+```
+$ nano ~/.bashrc
+```
+
 [Reference](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment)    
 
 ### Creating a catkin package
